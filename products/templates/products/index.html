@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <div class="product_container">
+        <div class="product_nav">
+            <ul>
+                <li {% if not category %} class="selected" {% endif %}>
+                    <a href="{% url 'products:product_list' %}">All</a>
+                </li>
+                {% for c in categories %}
+                    <li {% if category.slug == c.slug %} class="selected" {% endif %}>
+                        <a href="{{ c.get_absolute_url }}"> {{ c.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="products">
+            <div class="category">
+                <h1> {% if category %} {{ category.name }} {% else %} Products {% endif %}</h1>
+                <a href="{% url 'products:search' %}"> Search product </a>
+            </div>
+        
+            {% if products %}
+                <div class="product_items">
+                {% for product in products %}
+                        <div class="items">
+                            <div class="product_img">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img src="{% if product.image %}{{ product.image.url}} {% else %} {% static 'images/no_image_available.png'%} {% endif %}" alt="{{ product.name }}">
+                                </a>
+                            </div>
+
+                            <div class="product_name">
+                                <div>
+                                    <h3>
+                                        {{ product.name }}
+                                    </h3>
+                                </div>
+                                <div>
+                                    <p>
+                                        Ghc {{ product.price }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="product_owner">
+                                <div class="profile_pic">
+                                    <a href="{% url 'user_profile:profile' product.user.username%}">
+                                        <img src="{% if product.user.profile.profile_photo %} {{ product.user.profile.profile_photo.url }} {% else %} {% static 'images/no_image.jpg'%} {% endif %}" alt="{{ product.user.first_name}}">
+                                    </a>
+                                </div>
+                                <a href="{% url 'user_profile:profile' product.user.username%}">
+                                    <div class="username">
+                                        <h3>
+                                            {{ product.user.first_name}} {{ product.user.last_name }}
+                                        </h3>
+                                        <p>
+                                            {{ product.created | format_created_date }}
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                {% endfor %}
+                </div>
+            {% else %}
+                <p class="no_product">
+                    No products uploaded in this category
+                </p>
+            {% endif %}
+        </div>
+        {% include "products/paginator.html" with page=products%}
+    </div>
+    {% endblock %}
+</body>
+</html>

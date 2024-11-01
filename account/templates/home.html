@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello World!! {{ request.user.username }}</h1>
+
+    {% if request.user.is_authenticated %}
+        <button><a href="{% url 'account:form' %}"> Logout </a></button>
+        <button><a href="{% url 'account:password_change' %}"> Change Password </a></button>
+        <button><a href="{% url 'user_profile:profile_edit' %}"> Edit profile </a></button>
+        <button><a href="{% url 'products:product_list' %}"> Products </a></button>
+        <button><a href="{% url 'user_profile:profile' request.user.username %}"> Profile </a></button>
+    {% else %}
+        <button><a href="{% url 'account:signup' %}"> singup </a></button>
+        <button><a href="{% url 'account:login' %}"> Login </a></button>
+    {% endif %}
+
+    <div class="profiles">
+        {% for c_user in custom %}
+            <a href="{% url 'user_profile:profile' c_user.username %}">
+                <h4>
+                    {{ c_user.profile }}
+                </h4>
+
+                <img src="{% if c_user.profile.profile_photo %} {{ c_user.profile.profile_photo.url }}{%else%}{% static 'images/no_image.jpg' %}{% endif %}" alt="">
+            </a>
+        {% endfor %}
+    </div>
+</body>
+</html>

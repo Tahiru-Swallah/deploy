@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+        <div class="detail_container">
+            <div class="detail">
+                <div class="detail_img">
+                    <img src="{% if product.image %}{{ product.image.url}}{% else%}{% static 'images/no_image_available.png'%}{% endif %}" alt="{{ product.name }}">
+                </div>
+                <div class="details">
+                    <div class="name_price">
+                        <h2>{{ product.name }}</h2>
+                        <p> Ghc {{ product.price }} </p>
+                        <p class="prod_desc">
+                            {{ product.description }}
+                        </p>
+                    </div>
+                    <div class="buttons_for">
+                        {% if request.user == product.user %}
+                            <a href="{% url 'products:edit_product' product.id product.slug %}">
+                                Edit Product
+                            </a>
+
+                            <a href="{% url 'products:delete' product.id product.slug %}">
+                                Delete
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <a href="{% url 'user_profile:profile' product.user.username %}">
+                        <div class="prod_owner">
+                            <img src="{% if product.user.profile.profile_photo %}{{ product.user.profile.profile_photo.url}}{% else %}{% static 'images/no_image.jpg'%}{% endif %}" alt="{{ product.user.first_name}}">
+
+                            <h3>
+                                {{ product.user.first_name }} {{ product.user.last_name }}
+                            </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if query %}
+        <div class="create_container">
+            <h3>
+                Searching for "{{ query }}"
+            </h3>
+            <h3>
+                {% with results.count as total_results %}
+                    Found {{ total_results }} result{{ total_results|pluralize }}
+                {% endwith %}
+            </h3>
+
+            {% for product in results %}
+                <h4>
+                    <a href="{{ product.get_absolute_url }}">
+                        {{ product.name }}
+                    </a>
+                </h4>
+
+                <p>
+                    {{ product.user.username}}
+                </p>
+            {% empty %}
+                <p>
+                    There are no results found for "{{ query }}"
+                </p>
+            {% endfor %}
+        </div>
+    {% else %}
+        <form action="" method="get">
+            <h3>
+                Search for product
+            </h3>
+            <!-- {% csrf_token %} -->
+            {{ form.as_p }}
+
+            <button type="submit">Search</button>
+        </form>
+    {% endif %}
+</body>
+</html>

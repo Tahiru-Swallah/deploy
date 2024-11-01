@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        :root {
+            --primary-color: #1DA1F2;
+            --background-color: #14171A;
+            --light-gray: #666666;
+            --white-color: #ffffff;
+            --sidebar-background: #1A1D23;
+            --primary-text: #ffffff;
+            --link-text: #1DA1F2;
+            --secondary-text: #666666;
+            --tertiary-text: #808080;
+            --border-color: #2F3336;
+            --shadow-color: #000000;
+            --hover-color: #1A1D23;
+            --profile-background-color: #23272A;
+        }
+        .pagination {
+            margin-left: 20px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .pagination .step-links a{
+            color: var(--link-text);
+        }
+
+        .pagination .current {
+            color: var(--white-color);
+        }
+
+        .pagination a{
+            color: var(--link-text);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="pagination">
+        <span class="step-links">
+        {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ page.number }} of {{ page.paginator.num_pages }}.
+        </span>
+        {% if page.has_next %}
+            <a href="?page={{ page.next_page_number }}">Next</a>
+        {% endif %}
+        </span>
+    </div>
+</body>
+</html>

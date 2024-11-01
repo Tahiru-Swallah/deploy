@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+        <div class="profile_container">
+            <div class="sub_container">
+                <div class="upper_container">
+                    <div class="profile_img">
+                        <img src="{% if profile.profile_photo %}{{ profile.profile_photo.url}}{% else %}{% static 'images/no_image.jpg' %}{% endif %}" alt="{{ profile.user.first_name }}">
+
+                        <div class="user_name">
+                            {{ profile.user.first_name }} {{ profile.user.last_name }}
+                        </div>
+                    </div>
+
+                    <div class="count">
+                        <p>
+                            Product{{ product_count|pluralize }} <span>
+                                {{ product_count }}
+                            </span>
+                        </p>
+
+                        <p>
+                            View{{ product_count|pluralize }}  <span>
+                                <!-- {{ total_views }} --> {{ product_count }}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="buttons">
+                        {% if request.user == profile.user %}
+                            <a href="{% url 'user_profile:profile_edit' %}">
+                                Edit Profile
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="phone_number">
+                        <p>
+                            Call the seller on:
+                            <span>
+                                {% if profile.user.phone_number %}
+                                 {{ profile.user.phone_number }}
+                                {% else %}
+                                    edit the profile to add phone number
+                                {% endif %}
+                            </span>
+                            
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="profile_products">
+                    {% if products %}
+                        <div class="all_products">
+                            {% for product in products %}
+                                <div class="product">
+                                    <a href="{{ product.get_absolute_url}}">
+                                        <img src="{% if product.image %}{{ product.image.url}}{% else %}{static 'images/no_image_available.png'}{% endif %}" alt="{{product.name}}">
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>
+                            No products uploaded by this user
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+</html>
